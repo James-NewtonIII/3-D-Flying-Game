@@ -1,6 +1,15 @@
 
-var width = window.innerWidth;
+function worker_function() {
+    // all code here
+	var width = window.innerWidth;
 var height = window.innerHeight;
+
+
+//declaring physijs and ammojs
+Physijs.scripts.worker = '/js/physijs_worker.js';
+Physijs.scripts.ammo = '/js/ammo.js';
+
+
 
 
 var renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -9,7 +18,7 @@ renderer.setClearColor(0x63ddff);
 document.body.appendChild(renderer.domElement);
  
 // create scene object
-var scene = new THREE.Scene;
+var scene = new Physijs.Scene;
 
 
 var groundGeometry = new THREE.PlaneGeometry(1000, 1000);
@@ -19,39 +28,44 @@ ground.lookAt(new THREE.Vector3(0, 1, 0));
 ground.position.y = -10;
 scene.add(ground);
 
-// create simple geometry and add to scene
-var boxGeometry1 = new THREE.BoxGeometry(3, 20, 3);
-var boxGeometry2 = new THREE.BoxGeometry(3, 10, 3);
-var towerGeometry1 = new THREE.BoxGeometry(5, 30, 5);
-var towerGeometry2 = new THREE.BoxGeometry(5, 40, 5);
-var boxMaterial1 = new THREE.MeshLambertMaterial({ color: 0xff0000});
-var boxMaterial2 = new THREE.MeshLambertMaterial({ color: 0xaaaaaa});
-var towerMaterial1 = new THREE.MeshLambertMaterial({ color: 0xeeeeee});
-var towerMaterial2 = new THREE.MeshLambertMaterial({ color: 0xffffff});
+
 
 //creates a single pyramid
 var pyramidGeo = new THREE.CylinderGeometry(0, 40, 60, 4);
-var pyramid = new THREE.Mesh(pyramidGeo, towerMaterial2);
+var pyramid = new Physijs.CylinderMesh(pyramidGeo, new THREE.MeshLambertMaterial({ color: 0xffffff}));
 pyramid.position.set(300, 0, -300);
 scene.add(pyramid);
 
 //randomly position 100 boxes in a 300x300 square
 for(var i = 0; i < 50; i++){	
-	var box1 = new THREE.Mesh(boxGeometry1, boxMaterial1); 
+	var box1 = new Physijs.BoxMesh(
+			new THREE.CubeGeometry(3, 20, 3),	
+			new THREE.MeshLambertMaterial({ color: 0xff0000})
+	);
+	
 	box1.position.set(Math.random() * 1000 - 500, 0, Math.random() * 1000 - 500);
 	scene.add(box1);
 	
-	var box2 = new THREE.Mesh(boxGeometry2, boxMaterial2);
+	var box2 = new Physijs.BoxMesh(
+		new THREE.CubeGeometry(3, 10, 3),
+		new THREE.MeshLambertMaterial({ color: 0xaaaaaa})
+	);
 	box2.position.set(Math.random() * 1000 - 500, -5, Math.random() * 1000 - 500);
 	scene.add(box2);
 }
 //place 5 more larger boxes
 for(var i = 0; i < 5; i++){	
-	var tower = new THREE.Mesh(towerGeometry1, towerMaterial1);
+	var tower = new Physijs.BoxMesh(
+				 new THREE.CubeGeometry(5, 30, 5),
+				 new THREE.MeshLambertMaterial({ color: 0xeeeeee})
+	);
 	tower.position.set(Math.random() * 1000 - 500, 5, Math.random() * 1000 - 500);
 	scene.add(tower);
 }
-var tower2 = new THREE.Mesh(towerGeometry2, towerMaterial2);
+var tower2 = new Physijs.BoxMesh(
+			new THREE.CubeGeometry(5, 40, 5),
+			new THREE.MeshLambertMaterial({ color: 0xffffff})
+	);
 tower2.position.set(10, 10, -150);
 scene.add(tower2);
 
@@ -183,10 +197,14 @@ function render() {
 	camera.lookAt(newLookAt);
 	camera.up = cameraUp;
 	
-    renderer.render(scene, camera);
-    requestAnimationFrame(render);
+    scene.simulate(); // run physics
+	renderer.render( scene, camera); // render the scene
+	requestAnimationFrame( render );
 
 	
 }
 render();
 
+}
+
+worker_function();
