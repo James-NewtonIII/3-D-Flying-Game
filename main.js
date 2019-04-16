@@ -11,71 +11,65 @@ document.body.appendChild(renderer.domElement);
 // create scene object
 var scene = new THREE.Scene;
 
+//Coordinates for 200 buildings
 var buildingXs = [  
-				-900, -900, -900, -900, -900, -900, -900, -900, -900, -900, 
-				-850, -850, -850, -850, -850, -850, -850, -850, -850, -850,
-				
-				-700, -700, -700, -700, -700, -700, -700, -700, -700, -700, 
-				-650, -650, -650, -650, -650, -650, -650, -650, -650, -650, 
-				
-				-500, -500, -500, -500, -500, -500, -500, -500, -500, -500, 
-				-450, -450, -450, -450, -450, -450, -450, -450, -450, -450, 
-				
-				-300, -300, -300, -300, -300, -300, -300, -300, -300, -300, 
-				-250, -250, -250, -250, -250, -250, -250, -250, -250, -250, 
-				
-				-100, -100, -100, -100, -100, -100, -100, -100, -100, -100, 
-				-50, -50, -50, -50, -50, -50, -50, -50, -50, -50,
-				
-				100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
-				150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 
-				
-				300, 300, 300, 300, 300, 300, 300, 300, 300, 300,
-				350, 350, 350, 350, 350, 350, 350, 350, 350, 350, 
-				
-				500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 
-				550, 550, 550, 550, 550, 550, 550, 550, 550, 550, 
-				
-				700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 
-				750, 750, 750, 750, 750, 750, 750, 750, 750, 750, 
-				
-				900, 900, 900, 900, 900, 900, 900, 900, 900, 900, 
-				950, 950, 950, 950, 950, 950, 950, 950, 950, 950							
+	-900, -900, -900, -900, -900, -900, -900, -900, -900, -900, 
+	-850, -850, -850, -850, -850, -850, -850, -850, -850, -850,	
+	-700, -700, -700, -700, -700, -700, -700, -700, -700, -700, 
+	-650, -650, -650, -650, -650, -650, -650, -650, -650, -650,	
+	-500, -500, -500, -500, -500, -500, -500, -500, -500, -500, 
+	-450, -450, -450, -450, -450, -450, -450, -450, -450, -450,	
+	-300, -300, -300, -300, -300, -300, -300, -300, -300, -300, 
+	-250, -250, -250, -250, -250, -250, -250, -250, -250, -250,	
+	-100, -100, -100, -100, -100, -100, -100, -100, -100, -100, 
+	-50, -50, -50, -50, -50, -50, -50, -50, -50, -50,	
+	100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+	150, 150, 150, 150, 150, 150, 150, 150, 150, 150,	
+	300, 300, 300, 300, 300, 300, 300, 300, 300, 300,
+	350, 350, 350, 350, 350, 350, 350, 350, 350, 350,	
+	500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 
+	550, 550, 550, 550, 550, 550, 550, 550, 550, 550,	
+	700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 
+	750, 750, 750, 750, 750, 750, 750, 750, 750, 750,	
+	900, 900, 900, 900, 900, 900, 900, 900, 900, 900, 
+	950, 950, 950, 950, 950, 950, 950, 950, 950, 950							
 	];
 
 var buildingZs = [  
-					-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
-					-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
-					-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
-					-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
-					-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
-					
-					-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
-					-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
-					-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
-					-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
-					-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
-					
-					-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
-					-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
-					-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
-					-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
-					-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
-					
-					-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
-					-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
-					-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
-					-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
-					-900, -850, -700, -650, -500, -450, -300, -250, -100, -50
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50,	
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50,
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 	
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50,
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50,
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50,
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50,
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50,
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 	
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50,
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50,
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50
 	];
 
 //Creates a ground surface
 var groundGeometry = new THREE.PlaneGeometry(3000, 3000);
+var groundMaterial1 = new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture('114_green grass texture-seamless.jpg')});
+
 var groundMaterial = new THREE.MeshLambertMaterial( {color: 0x00db0f, side: THREE.DoubleSide});
-var ground = new THREE.Mesh(groundGeometry, groundMaterial);
+var ground = new THREE.Mesh(groundGeometry, groundMaterial1);
 ground.lookAt(new THREE.Vector3(0, 1, 0));
-ground.position.y = -10;
+ground.position.y = 0;
 scene.add(ground);
+
+//array to hold the buildings
+var buildings = []
 
 //Dimensions for the buildings
 var building1 = new THREE.BoxGeometry(25, 60, 25);
@@ -86,37 +80,41 @@ var building4 = new THREE.BoxGeometry(25, 140, 25);
 //**********************************************************************************
 //*********************************  TODO  *****************************************
 //Update materials to have a building skin
+
+//Buiding Textures
+var bldgMaterial1 = new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture('84_building skyscraper texture-seamless.jpg')});
+var bldgMaterial2 = new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture('4_glass building skyscraper texture-seamless.jpg')});
+var bldgMaterial3 = new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture('59_glass building skyscraper texture-seamless.jpg')});
+var bldgMaterial4 = new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture('42_building skyscraper texture-seamless.jpg')});
+
+//Currently not used
 var buildingMaterial1 = new THREE.MeshLambertMaterial({ color: 0xff0000});
 var buildingMaterial2 = new THREE.MeshLambertMaterial({ color: 0xffffff});
 var buildingMaterial3 = new THREE.MeshLambertMaterial({ color: 0x000000});
 var buildingMaterial4 = new THREE.MeshLambertMaterial({ color: 0x0000ff});
 
-/*
-//creates a single pyramid
-var pyramidGeo = new THREE.CylinderGeometry(0, 40, 60, 4);
-var pyramid = new THREE.Mesh(pyramidGeo, towerMaterial2);
-pyramid.position.set(300, 0, -300);
-scene.add(pyramid);
-*/
-
-//randomly position 100 boxes in a 300x300 square
+//Place buildings
 for(var i = 0; i < 200; i+=4){	
-	var b1 = new THREE.Mesh(building1, buildingMaterial1); 
-	b1.position.set(buildingXs[i], 20, buildingZs[i]);
+	var b1 = new THREE.Mesh(building1, bldgMaterial1); 
+	b1.position.set(buildingXs[i], 30, buildingZs[i]);
 	scene.add(b1);
 	
-	var b2 = new THREE.Mesh(building2, buildingMaterial2);
-	b2.position.set(buildingXs[i + 1], 30, buildingZs[i + 1]);
+	var b2 = new THREE.Mesh(building2, bldgMaterial2);
+	b2.position.set(buildingXs[i + 1], 40, buildingZs[i + 1]);
 	scene.add(b2);
 	
-	var b3 = new THREE.Mesh(building3, buildingMaterial3);
-	b3.position.set(buildingXs[i + 2], 40, buildingZs[i + 2]);
+	var b3 = new THREE.Mesh(building3, bldgMaterial3);
+	b3.position.set(buildingXs[i + 2], 50, buildingZs[i + 2]);
 	scene.add(b3);
 	
-	var b4 = new THREE.Mesh(building4, buildingMaterial4);
-	b4.position.set(buildingXs[i + 3], 60, buildingZs[i + 3]);
+	var b4 = new THREE.Mesh(building4, bldgMaterial4);
+	b4.position.set(buildingXs[i + 3], 70, buildingZs[i + 3]);
 	scene.add(b4);
+	//add each building to the buildings array
+	buildings.push(b1, b2, b3, b4);
 }
+
+
 /*
 //place 5 more larger boxes
 for(var i = 0; i < 5; i++){	
@@ -140,7 +138,7 @@ scene.add(ambientLight);
 // create perspective camera
 var camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 10000);
 camera.position.x = 0;
-camera.position.y = 250;
+camera.position.y = 200;
 camera.position.z = 1200;
 // add to scene and renderer
 scene.add(camera); 
@@ -207,7 +205,7 @@ function doKeyUp(evt) {
 }
 
 function doKeyDown(evt) {
-		var code = evt.keyCode;
+	var code = evt.keyCode;
 	switch(code) {
 		case 65: // a
 			camStrafe.x = -cameraRight.x / 1.0;
@@ -219,10 +217,10 @@ function doKeyDown(evt) {
 			camStrafe.y = cameraRight.y / 1.0;
 			camStrafe.z = cameraRight.z / 1.0;
 			break;
-		case 87: // w 
+		case 87: // w 			
 			camMove.x = cameraLookAt.x / 1.0;
 			camMove.y = cameraLookAt.y / 1.0;
-			camMove.z = cameraLookAt.z / 1.0;
+			camMove.z = cameraLookAt.z / 1.0;			
 			break;
 		case 83: // s
 			camMove.x = -cameraLookAt.x / 1.0;
