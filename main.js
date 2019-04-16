@@ -1,3 +1,35 @@
+/*
+this function create the building with images
+it must provided with image path, the width, height and depth of the building
+
+Image from :https://gamestextures.com/en/c/271/g/8824/Default.aspx
+*/
+function buildingImage(image,wdith,height,depth) {
+	
+	//image loader
+    var loader = new THREE.TextureLoader();
+    var texture = loader.load(image);
+    var material = new THREE.MeshBasicMaterial({
+      map: texture,
+      side: THREE.DoubleSide,
+      opacity: 1
+	});
+	
+	//add image to the box
+	material.map.wrapS = material.map.wrapT = THREE.RepeatWrapping;
+	material.map.repeat.set( 3, 3 );
+
+	var building = new Physijs.BoxMesh(
+		new THREE.CubeGeometry(wdith, height, depth),	
+		material
+		
+	);
+	//random position
+	building.position.set(Math.random() * 1000 - 500, 0, Math.random() * 1000 - 500);
+
+    return building;
+}
+
 
 function worker_function() {
     // all code here
@@ -36,30 +68,21 @@ var pyramid = new Physijs.CylinderMesh(pyramidGeo, new THREE.MeshLambertMaterial
 pyramid.position.set(300, 0, -300);
 scene.add(pyramid);
 
+
+
 //randomly position 100 boxes in a 300x300 square
 for(var i = 0; i < 50; i++){	
-	var box1 = new Physijs.BoxMesh(
-			new THREE.CubeGeometry(3, 20, 3),	
-			new THREE.MeshLambertMaterial({ color: 0xff0000})
-	);
 	
-	box1.position.set(Math.random() * 1000 - 500, 0, Math.random() * 1000 - 500);
-	scene.add(box1);
+	var cube = buildingImage("images/office_wall.jpg" ,3, 20,3 );
+	scene.add(cube);
 	
-	var box2 = new Physijs.BoxMesh(
-		new THREE.CubeGeometry(3, 10, 3),
-		new THREE.MeshLambertMaterial({ color: 0xaaaaaa})
-	);
-	box2.position.set(Math.random() * 1000 - 500, -5, Math.random() * 1000 - 500);
-	scene.add(box2);
+	cube1 = buildingImage("images/house_wall.jpg" ,3, 10,3 );
+	scene.add(cube1);
 }
 //place 5 more larger boxes
-for(var i = 0; i < 5; i++){	
-	var tower = new Physijs.BoxMesh(
-				 new THREE.CubeGeometry(5, 30, 5),
-				 new THREE.MeshLambertMaterial({ color: 0xeeeeee})
-	);
-	tower.position.set(Math.random() * 1000 - 500, 5, Math.random() * 1000 - 500);
+for(var i = 0; i < 5; i++){
+
+	var tower = buildingImage("images/concrete_wall.jpg" ,5, 30,5 );
 	scene.add(tower);
 }
 var tower2 = new Physijs.BoxMesh(
