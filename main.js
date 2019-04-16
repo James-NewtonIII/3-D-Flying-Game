@@ -204,7 +204,7 @@ function render() {
 	
 }
 render();
-
+console.clear();
 }
 
 worker_function();

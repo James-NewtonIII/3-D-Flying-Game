@@ -92,7 +92,7 @@ setShapeCache = function ( cache_key, shape ) {
 createShape = function( description ) {
 	var cache_key, shape;
 
-	_transform.setIdentity();
+	_transform.setIdentity;
 	switch ( description.type ) {
 		case 'plane':
 			cache_key = 'plane_' + description.normal.x + '_' + description.normal.y + '_' + description.normal.z;
