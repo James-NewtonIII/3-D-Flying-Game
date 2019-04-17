@@ -68,6 +68,15 @@ ground.lookAt(new THREE.Vector3(0, 1, 0));
 ground.position.y = 0;
 scene.add(ground);
 
+var undergroundGeometry = new THREE.PlaneGeometry(3000, 3000);
+var undergroundMaterial1 = new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture('lava1.jpg')});
+
+var undergroundMaterial = new THREE.MeshLambertMaterial( {color: 0x00db0f, side: THREE.DoubleSide});
+var underground = new THREE.Mesh(undergroundGeometry, undergroundMaterial1);
+underground.lookAt(new THREE.Vector3(0, -1, 0));
+underground.position.y = 0;
+scene.add(underground);
+
 //array to hold the buildings
 var buildings = []
 
@@ -220,12 +229,17 @@ function doKeyDown(evt) {
 		case 87: // w 			
 			camMove.x = cameraLookAt.x / 1.0;
 			camMove.y = cameraLookAt.y / 1.0;
-			camMove.z = cameraLookAt.z / 1.0;			
+			camMove.z = cameraLookAt.z / 1.0;
+			//sets the sky background to red
+			if (camera.position.y < 0)
+				renderer.setClearColor(0xe21616);
 			break;
 		case 83: // s
 			camMove.x = -cameraLookAt.x / 1.0;
 			camMove.y = -cameraLookAt.y / 1.0;
 			camMove.z = -cameraLookAt.z / 1.0;
+			if (camera.position.y < 0)
+				renderer.setClearColor(0xe21616);
 			break;
 		
 	}
