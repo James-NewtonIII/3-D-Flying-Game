@@ -1,10 +1,9 @@
 /*
 this function create the building with images
 it must provided with image path, the width, height and depth of the building
-
 Image from :https://gamestextures.com/en/c/271/g/8824/Default.aspx
 */
-function buildingImage(image,wdith,height,depth) {
+function buildingImage(image,wdith,height,depth, positionX, positionY,positionZ) {
 	
 	//image loader
     var loader = new THREE.TextureLoader();
@@ -17,7 +16,7 @@ function buildingImage(image,wdith,height,depth) {
 	
 	//add image to the box
 	material.map.wrapS = material.map.wrapT = THREE.RepeatWrapping;
-	material.map.repeat.set( 3, 3 );
+	material.map.repeat.set( 1, 1 );
 
 	var building = new Physijs.BoxMesh(
 		new THREE.CubeGeometry(wdith, height, depth),	
@@ -25,10 +24,17 @@ function buildingImage(image,wdith,height,depth) {
 		
 	);
 	//random position
-	building.position.set(Math.random() * 1000 - 500, 0, Math.random() * 1000 - 500);
+	building.position.set(positionX, positionY, positionZ);
 
     return building;
 }
+
+
+
+
+
+
+
 
 
 function worker_function() {
@@ -53,15 +59,146 @@ document.body.appendChild(renderer.domElement);
 var scene = new Physijs.Scene;
 
 
-var groundGeometry = new THREE.PlaneGeometry(1000, 1000);
-var groundMaterial = new THREE.MeshLambertMaterial( {color: 0x00bf0f, side: THREE.DoubleSide});
-var ground = new THREE.Mesh(groundGeometry, groundMaterial);
+var groundGeometry = new THREE.PlaneGeometry(3000, 3000);
+var groundMaterial1 = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('images/114_green grass texture-seamless.jpg')});
+
+var groundMaterial = new THREE.MeshLambertMaterial( {color: 0x00db0f, side: THREE.DoubleSide});
+var ground = new Physijs.PlaneMesh(groundGeometry, groundMaterial1);
 ground.lookAt(new THREE.Vector3(0, 1, 0));
-ground.position.y = -10;
+ground.position.y = 0;
 scene.add(ground);
 
+////////////////////////////////////////////Streets//////////////////////////////////
 
 
+//////////diagonal streets street2-street7
+//street2
+var street2Geometry = new THREE.PlaneGeometry(40, 2050);
+var street2Material1 = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('images/street.jpg')});
+var street2 = new Physijs.PlaneMesh(street2Geometry, street2Material1);
+street2.lookAt(new THREE.Vector3(0, 1, 0));
+street2.position.y = .2;
+street2.position.x=20;
+street2.position.z=-175;
+scene.add(street2);
+//street3
+var street3 = new Physijs.PlaneMesh(street2Geometry, street2Material1);
+street3.lookAt(new THREE.Vector3(0, 1, 0));
+street3.position.y = .2;
+street3.position.x=20;
+street3.position.z=-375;
+scene.add(street3);
+//street4
+var street4 = new Physijs.PlaneMesh(street2Geometry, street2Material1);
+street4.lookAt(new THREE.Vector3(0, 1, 0));
+street4.position.y = .2;
+street4.position.x=20;
+street4.position.z=-575;
+scene.add(street4);
+//street5
+var street5 = new Physijs.PlaneMesh(street2Geometry, street2Material1);
+street5.lookAt(new THREE.Vector3(0, 1, 0));
+street5.position.y = .2;
+street5.position.x=20;
+street5.position.z=-775;
+scene.add(street5);
+//street6
+var street6 = new Physijs.PlaneMesh(street2Geometry, street2Material1);
+street6.lookAt(new THREE.Vector3(0, 1, 0));
+street6.position.y = .2;
+street6.position.x=20;
+street6.position.z=-975;
+scene.add(street6);
+//street7
+var street7 = new Physijs.PlaneMesh(street2Geometry, street2Material1);
+street7.lookAt(new THREE.Vector3(0, 1, 0));
+street7.position.y = .2;
+street7.position.x=20;
+street7.position.z=25;
+scene.add(street7);
+
+/////////////////////////////////////straight streets//////////////////////////////
+//Main Street
+var streetGeometry = new THREE.PlaneGeometry(1040, 40);
+var streetMaterial1 = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('images/street.jpg')});
+var streetMaterial = new THREE.MeshLambertMaterial( {color: 0x00db0f, side: THREE.DoubleSide});
+var street = new Physijs.PlaneMesh(streetGeometry, streetMaterial1);
+street.lookAt(new THREE.Vector3(0, 1, 0));
+street.position.y = .2;
+street.position.x=20;
+street.position.z=-475;
+scene.add(street);
+//street8
+var street8 = new Physijs.PlaneMesh(streetGeometry, streetMaterial1);
+street8.lookAt(new THREE.Vector3(0, 1, 0));
+street8.position.y = .2;
+street8.position.x=-175;
+street8.position.z=-475;
+scene.add(street8);
+//street9
+var street9 = new Physijs.PlaneMesh(streetGeometry, streetMaterial1);
+street9.lookAt(new THREE.Vector3(0, 1, 0));
+street9.position.y = .2;
+street9.position.x=-375;
+street9.position.z=-475;
+scene.add(street9);
+//street10
+var street10 = new Physijs.PlaneMesh(streetGeometry, streetMaterial1);
+street10.lookAt(new THREE.Vector3(0, 1, 0));
+street10.position.y = .2;
+street10.position.x=-575;
+street10.position.z=-475;
+scene.add(street10);
+//street11
+var street11 = new Physijs.PlaneMesh(streetGeometry, streetMaterial1);
+street11.lookAt(new THREE.Vector3(0, 1, 0));
+street11.position.y = .2;
+street11.position.x=-775;
+street11.position.z=-475;
+scene.add(street11);
+//street12
+var street12 = new Physijs.PlaneMesh(streetGeometry, streetMaterial1);
+street12.lookAt(new THREE.Vector3(0, 1, 0));
+street12.position.y = .2;
+street12.position.x=-1025;
+street12.position.z=-475;
+scene.add(street12);
+//street13
+var street13 = new Physijs.PlaneMesh(streetGeometry, streetMaterial1);
+street13.lookAt(new THREE.Vector3(0, 1, 0));
+street13.position.y = .2;
+street13.position.x=225;
+street13.position.z=-475;
+scene.add(street13);
+//street14
+var street14 = new Physijs.PlaneMesh(streetGeometry, streetMaterial1);
+street14.lookAt(new THREE.Vector3(0, 1, 0));
+street14.position.y = .2;
+street14.position.x=425;
+street14.position.z=-475;
+scene.add(street14);
+//street15
+var street15 = new Physijs.PlaneMesh(streetGeometry, streetMaterial1);
+street15.lookAt(new THREE.Vector3(0, 1, 0));
+street15.position.y = .2;
+street15.position.x=625;
+street15.position.z=-475;
+scene.add(street15);
+//street16
+var street16 = new Physijs.PlaneMesh(streetGeometry, streetMaterial1);
+street16.lookAt(new THREE.Vector3(0, 1, 0));
+street16.position.y = .2;
+street16.position.x=825;
+street16.position.z=-475;
+scene.add(street16);
+//street17
+var street17 = new Physijs.PlaneMesh(streetGeometry, streetMaterial1);
+street17.lookAt(new THREE.Vector3(0, 1, 0));
+street17.position.y = .2;
+street17.position.x=1025;
+street17.position.z=-475;
+scene.add(street17);
+/////////////////////////////////////////////////////////////////End of Streets//////////////////////////////////////////////////
 //creates a single pyramid
 var pyramidGeo = new THREE.CylinderGeometry(0, 40, 60, 4);
 var pyramid = new Physijs.CylinderMesh(pyramidGeo, new THREE.MeshLambertMaterial({ color: 0xffffff}));
@@ -70,27 +207,71 @@ scene.add(pyramid);
 
 
 
-//randomly position 100 boxes in a 300x300 square
-for(var i = 0; i < 50; i++){	
-	
-	var cube = buildingImage("images/office_wall.jpg" ,3, 20,3 );
-	scene.add(cube);
-	
-	cube1 = buildingImage("images/house_wall.jpg" ,3, 10,3 );
-	scene.add(cube1);
-}
-//place 5 more larger boxes
-for(var i = 0; i < 5; i++){
+//position boxes in a city like environment
 
-	var tower = buildingImage("images/concrete_wall.jpg" ,5, 30,5 );
-	scene.add(tower);
+//Coordinates for 200 buildings
+var buildingXs = [  
+	-900, -900, -900, -900, -900, -900, -900, -900, -900, -900, 
+	-850, -850, -850, -850, -850, -850, -850, -850, -850, -850,	
+	-700, -700, -700, -700, -700, -700, -700, -700, -700, -700, 
+	-650, -650, -650, -650, -650, -650, -650, -650, -650, -650,	
+	-500, -500, -500, -500, -500, -500, -500, -500, -500, -500, 
+	-450, -450, -450, -450, -450, -450, -450, -450, -450, -450,	
+	-300, -300, -300, -300, -300, -300, -300, -300, -300, -300, 
+	-250, -250, -250, -250, -250, -250, -250, -250, -250, -250,	
+	-100, -100, -100, -100, -100, -100, -100, -100, -100, -100, 
+	-50, -50, -50, -50, -50, -50, -50, -50, -50, -50,	
+	100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+	150, 150, 150, 150, 150, 150, 150, 150, 150, 150,	
+	300, 300, 300, 300, 300, 300, 300, 300, 300, 300,
+	350, 350, 350, 350, 350, 350, 350, 350, 350, 350,	
+	500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 
+	550, 550, 550, 550, 550, 550, 550, 550, 550, 550,	
+	700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 
+	750, 750, 750, 750, 750, 750, 750, 750, 750, 750,	
+	900, 900, 900, 900, 900, 900, 900, 900, 900, 900, 
+	950, 950, 950, 950, 950, 950, 950, 950, 950, 950							
+	];
+
+var buildingZs = [  
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50,	
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50,
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 	
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50,
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50,
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50,
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50,
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50,
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 	
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50,
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50,
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50, 
+	-900, -850, -700, -650, -500, -450, -300, -250, -100, -50
+	];
+
+
+for(var i = 0; i < 200; i+=4){	
+	
+	var b1 = buildingImage("images/house_wall.jpg" ,25, 60,25, buildingXs[i], 30,buildingZs[i] );
+	scene.add(b1);
+	
+	var b2 = buildingImage("images/bricks_wall.jpg" ,25, 80,25, buildingXs[i+1], 40,buildingZs[i+1] );
+	scene.add(b2);
+	
+	var b3 = buildingImage("images/concrete_wall.jpg" ,25, 100,25, buildingXs[i+2], 50,buildingZs[i+2] );
+	scene.add(b3);
+	
+	var b4 = buildingImage("images/office_wall.jpg" ,25, 140,25, buildingXs[i+3], 70, buildingZs[i+3] );
+	scene.add(b4);
 }
-var tower2 = new Physijs.BoxMesh(
-			new THREE.CubeGeometry(5, 40, 5),
-			new THREE.MeshLambertMaterial({ color: 0xffffff})
-	);
-tower2.position.set(10, 10, -150);
-scene.add(tower2);
+
 
 
  
@@ -109,7 +290,7 @@ camera.position.z = 40;
 // add to scene and renderer
 scene.add(camera); 
 renderer.render(scene, camera);
-camera.lookAt(tower2.position);
+camera.lookAt(pyramid);
 
 
 
@@ -227,7 +408,7 @@ function render() {
 	
 }
 render();
-console.clear();
+
 }
 
 worker_function();
