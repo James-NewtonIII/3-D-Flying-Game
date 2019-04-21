@@ -3,12 +3,11 @@ this function create the building with images
 it must provided with image path, the width, height and depth of the building
 Image from :https://gamestextures.com/en/c/271/g/8824/Default.aspx
 */
-function buildingImage(image,wdith,height,depth, positionX, positionY,positionZ) {
+function buildingImage(image,width,height,depth, positionX, positionY,positionZ) {
 	
 	//image loader
-    var loader = new THREE.TextureLoader();
-    var texture = loader.load(image);
-    var material = new THREE.MeshBasicMaterial({
+    var texture = new THREE.TextureLoader().load(image);
+    var material = new THREE.MeshLambertMaterial({
       map: texture,
       side: THREE.DoubleSide,
       opacity: 1
@@ -19,13 +18,16 @@ function buildingImage(image,wdith,height,depth, positionX, positionY,positionZ)
 	material.map.repeat.set( 1, 1 );
 
 	var building = new Physijs.BoxMesh(
-		new THREE.CubeGeometry(wdith, height, depth),	
+		new THREE.CubeGeometry(width, height, depth),	
 		material
 		
 	);
+	building.addEventListener( 'collision', function( other_object, relative_velocity, relative_rotation, contact_normal ) {
+    // `this` has collided with `other_object` with an impact speed of `relative_velocity` and a rotational force of `relative_rotation` and at normal `contact_normal`
+	});																													 
 	//random position
 	building.position.set(positionX, positionY, positionZ);
-
+	buildingGroup.add(building);
     return building;
 }
 //worker function for logic code
@@ -35,8 +37,8 @@ var width = window.innerWidth;
 var height = window.innerHeight;
 
 //declaring physijs and ammojs
-Physijs.scripts.worker = '/js/physijs_worker.js';
-Physijs.scripts.ammo = '/js/ammo.js';
+Physijs.scripts.worker = './lib/physijs_worker.js';
+Physijs.scripts.ammo = './lib/ammo.js';
 //renderer
 var renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(width, height);
@@ -44,15 +46,21 @@ renderer.setClearColor(0x63ddff);
 document.body.appendChild(renderer.domElement);
 // create scene object
 var scene = new Physijs.Scene;
+
 //create ground
-var groundGeometry = new THREE.PlaneGeometry(2000, 3000);
-var groundMaterial1 = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('images/114_green grass texture-seamless.jpg')});
-var groundMaterial = new THREE.MeshLambertMaterial( {color: 0x00db0f, side: THREE.DoubleSide});
+var groundGeometry = new THREE.PlaneGeometry(4096, 4096);
+var groundMaterial1 = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('images/grass_texture.jpg'), side: THREE.DoubleSide});
+	groundMaterial1.map.wrapS = groundMaterial1.map.wrapT = THREE.RepeatWrapping;
+	groundMaterial1.map.repeat.set( 4, 4 );
+//var groundMaterial = new THREE.MeshLambertMaterial( {color: 0x00db0f, side: THREE.DoubleSide});
 var ground = new Physijs.PlaneMesh(groundGeometry, groundMaterial1);
 ground.lookAt(new THREE.Vector3(0, 1, 0));
 ground.position.y = 0;
 ground.position.z = -500;
+ground.receiveShadow = true;
 scene.add(ground);
+//Creates buildingGroup
+buildingGroup = new THREE.Group();
 ////////////////////////////////////////////Streets//////////////////////////////////
 //diagonal streets 
 var street2Geometry = new THREE.PlaneGeometry(40, 2050);
@@ -260,8 +268,8 @@ for(var i=0; i<200; i++){
 //creates a single pyramid
 var pyramidGeo = new THREE.CylinderGeometry(0, 40, 60, 4);
 var pyramid = new Physijs.CylinderMesh(pyramidGeo, new THREE.MeshLambertMaterial({ color: 0xffffff}));
-pyramid.position.set(300, 0, -300);
-scene.add(pyramid);
+pyramid.position.set(300, 60/2, -300);
+buildingGroup.add(pyramid);
 
 //position boxes in a city like environment
 //Coordinates for 200 buildings, and the for loop that creates them
@@ -311,14 +319,16 @@ var buildingZs = [
 	];
 for(var i = 0; i < 200; i+=4){	
 	var b1 = buildingImage("images/house_wall.jpg" ,25, 60,25, buildingXs[i], 30,buildingZs[i] );
-	scene.add(b1);
+	buildingGroup.add(b1);
 	var b2 = buildingImage("images/bricks_wall.jpg" ,25, 80,25, buildingXs[i+1], 40,buildingZs[i+1] );
-	scene.add(b2);
+	buildingGroup.add(b2);
 	var b3 = buildingImage("images/concrete_wall.jpg" ,25, 100,25, buildingXs[i+2], 50,buildingZs[i+2] );
-	scene.add(b3);	
+	buildingGroup.add(b3);	
 	var b4 = buildingImage("images/office_wall.jpg" ,25, 140,25, buildingXs[i+3], 70, buildingZs[i+3] );
-	scene.add(b4);
+	buildingGroup.add(b4);
 } 
+//adds all buildings in buildingGroup to scene
+scene.add(buildingGroup);
 // add lighting and add to scene
 var directionalLight = new THREE.DirectionalLight(0xffffff, 1);
 directionalLight.position.set(1000, 50, 300).normalize();
@@ -329,26 +339,56 @@ scene.add(ambientLight);
 // create perspective camera
 var camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 10000);
 camera.position.x = 0;
-camera.position.y = 5;
+camera.position.y = 10;
 camera.position.z = 40;
 // add to scene and renderer
 scene.add(camera); 
-renderer.render(scene, camera);
 camera.lookAt(pyramid);
+//model
+var mixers = [];
+var timer = new THREE.Clock();
+var loader = new THREE.FBXLoader();
+var heli;
+
+loader.load('./model/md500.FBX', function (object) {
+	object.scale.set( 1, 1, 1 )
+	object.position.x = camera.position.x;
+	object.position.y = camera.position.y-10;					   
+	object.position.z = camera.position.z-20;
+	object.rotation.y = Math.PI;
+	heli = object;
+
+	mixer = new THREE.AnimationMixer(object);
+	mixers.push(mixer);
+	mixer.clipAction(object.animations[0]).play();
+	scene.add(object);
+});
+//rotor spin animation	
+function rotorSpin() {
+    if (mixers.length > 0){
+		for (var i = 0; i < mixers.length; i++) {
+			mixers[i].update(timer.getDelta());
+		}
+    }
+}
+//stats display
+var stats = new Stats();
+stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+document.body.appendChild( stats.dom );
 
 //event listeners and variables for them
 var firstMouseMove  = true;
-
+var raycaster = new THREE.Raycaster(),targeted;
+var mouse = new THREE.Vector2();
 var camPos = {x: 0, y: 0, z: -1};
-
 var camMove = new THREE.Vector3(0, 0, 0);
 var camStrafe = new THREE.Vector3(0, 0, 0);
-
 var cameraLookAt = new THREE.Vector3(0, 0, -1);
 var cameraRight = new THREE.Vector3(1, 0, 0);
 var cameraUp = new THREE.Vector3().crossVectors(cameraRight, cameraLookAt);
-
+var cameraFloat = new THREE.Vector3(0, 1, 0);
 var oldMousePos = {x: 0, y: 0};
+var key = [];
 
 function handleMouseMove(event) {
 	if(firstMouseMove) {
@@ -361,6 +401,8 @@ function handleMouseMove(event) {
 	var yaw = (oldMousePos.x - event.clientX) / 200.0;
 	var pitch = (oldMousePos.y - event.clientY) / 200.0;
 	
+	heli.rotation.y += yaw;
+	heli.rotation.x += pitch;										  
 	cameraLookAt.applyAxisAngle(new THREE.Vector3(0, 1, 0), yaw);
 	cameraRight.applyAxisAngle(new THREE.Vector3(0, 1, 0), yaw);
 	
@@ -370,59 +412,85 @@ function handleMouseMove(event) {
 	oldMousePos.x = event.clientX;
 	oldMousePos.y = event.clientY;
 	
+	//raycaster 
+	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;	  
 		
 }
+//caster uses raycaster to change emissive element of targeted object 
+function caster(){
+	raycaster.setFromCamera(mouse, camera);
+	var targeting = raycaster.intersectObjects(buildingGroup.children);
+	if (targeting.length > 0) {
+        if (targeted != targeting[0].object) {
+            if (targeted){
+				targeted.material.emissive.setHex(targeted.currentHex);
+			}
+            targeted = targeting[0].object;
+            targeted.currentHex = targeted.material.emissive.getHex();
+            //setting up new material on hover
+            targeted.material.emissive.setHex(0x404040);
+        }
+    } else {
+        if (targeted){
+		targeted.material.emissive.setHex(targeted.currentHex);
+		}
+        targeted = null;	  
+    }
+}
 
-
-function doKeyUp(evt) {
-	var code = evt.keyCode;
-	switch(code) {
-		case 65: // a
-			camStrafe.x = 0;  camStrafe.y = 0; camStrafe.z = 0;
-			break;
-		case 68: // d
-			camStrafe.x = 0;  camStrafe.y = 0; camStrafe.z = 0;
-			break;
-		case 87:
-			camMove.x = 0; camMove.y = 0; camMove.z = 0;
-			break;
-		case 83:
-			camMove.x = 0; camMove.y = 0; camMove.z = 0;
-			break;
+function movement() {
+	//A
+    if (key[65]) {   
+	   camera.position.sub(cameraRight);
+	   heli.position.sub(cameraRight);
+    }
+	//D
+    if (key[68]) {
+		camera.position.add(cameraRight);
+		heli.position.add(cameraRight);
+    }
+	if(!key[68]){
+		//if(cameraRight.x < 0.9 && cameraRight.x > 0.85)
+		//	heli.position.add(cameraRight);
+	}
+	//W
+	if (key[83]) {
+		camera.position.sub(cameraLookAt);
+		heli.position.sub(cameraLookAt);
+	}
+	//S
+	if (key[87]) {
+		camera.position.add(cameraLookAt);
+		heli.position.add(cameraLookAt);
+	}
+	//SPACEBAR
+	if (key[32]) {
+		camera.position.add(cameraFloat);
+		heli.position.add(cameraFloat);
+	}
+	//SHIFT
+	if (key[16]) {
+		camera.position.sub(cameraFloat);
+		heli.position.sub(cameraFloat);
 	}
 }
-function doKeyDown(evt) {
-		var code = evt.keyCode;
-	switch(code) {
-		case 65: // a
-			camStrafe.x = -cameraRight.x / 0.1;
-			camStrafe.y = -cameraRight.y / 0.1;
-			camStrafe.z = -cameraRight.z / 0.1;
-			break;
-		case 68: // d
-			camStrafe.x = cameraRight.x / 0.1;
-			camStrafe.y = cameraRight.y / 0.1;
-			camStrafe.z = cameraRight.z / 0.1;
-			break;
-		case 87: // w 
-			camMove.x = cameraLookAt.x / 0.1;
-			camMove.y = cameraLookAt.y / 0.1;
-			camMove.z = cameraLookAt.z / 0.1;
-			break;
-		case 83: // s
-			camMove.x = -cameraLookAt.x / 0.1;
-			camMove.y = -cameraLookAt.y / 0.1;
-			camMove.z = -cameraLookAt.z / 0.1;
-			break;	
-	}
-}
+
 //event listener calls
 document.addEventListener('mousemove', handleMouseMove, false);
-document.addEventListener('keydown', doKeyDown, false);
-document.addEventListener('keyup', doKeyUp, false);
+document.body.addEventListener("keydown", function (k) {
+	key[k.keyCode] = true;
+});
+document.body.addEventListener("keyup", function (k) {
+	key[k.keyCode] = false;
+});
+
 //render
-renderer.render(scene, camera);
 function render() {
+	movement();
+	rotorSpin();
+	caster();
+	stats.update();
 	camera.position.add(camMove);
 	camera.position.add(camStrafe);
 	var newLookAt = new THREE.Vector3().addVectors(camera.position, cameraLookAt);
