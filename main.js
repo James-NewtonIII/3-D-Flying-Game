@@ -3,6 +3,7 @@ this function create the building with images
 it must provided with image path, the width, height and depth of the building
 Image from :https://gamestextures.com/en/c/271/g/8824/Default.aspx
 */
+
 function buildingImage(image,width,height,depth, positionX, positionY,positionZ) {
 	
 	//image loader
@@ -48,7 +49,7 @@ document.body.appendChild(renderer.domElement);
 var scene = new Physijs.Scene;
 
 //create ground
-var groundGeometry = new THREE.PlaneGeometry(4096, 4096);
+var groundGeometry = new THREE.PlaneGeometry(3000, 2000);
 var groundMaterial1 = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('images/grass_texture.jpg'), side: THREE.DoubleSide});
 	groundMaterial1.map.wrapS = groundMaterial1.map.wrapT = THREE.RepeatWrapping;
 	groundMaterial1.map.repeat.set( 4, 4 );
@@ -62,58 +63,68 @@ scene.add(ground);
 //Creates buildingGroup
 buildingGroup = new THREE.Group();
 ////////////////////////////////////////////Streets//////////////////////////////////
-//diagonal streets 
-var street2Geometry = new THREE.PlaneGeometry(40, 2050);
+//straight streets 
+var street2Geometry = new THREE.PlaneGeometry(40, 1040);
 var street2Material1 = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('images/street.jpg')});
-z= -175;
-for(var i=0; i<6; i++){
-	var street2 = new Physijs.PlaneMesh(street2Geometry, street2Material1);
-	street2.lookAt(new THREE.Vector3(0, 1, 0));
-	street2.position.y = .2;
-	street2.position.x=20;
-	street2.position.z=z;
-	scene.add(street2);
-	z-=200;	
-}
-var street7 = new Physijs.PlaneMesh(street2Geometry, street2Material1);
-street7.lookAt(new THREE.Vector3(0, 1, 0));
-street7.position.y = .2;
-street7.position.x=20;
-street7.position.z=25;
-scene.add(street7);
 
-/////////////////////////////////////straight streets//////////////////////////////
-//Main Street
-var streetGeometry = new THREE.PlaneGeometry(1040, 40);
-var streetMaterial1 = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('images/street.jpg')});
-var x= -175;
-for(var i=0; i<4; i++){
-	var street8 = new Physijs.PlaneMesh(streetGeometry, streetMaterial1);
-street8.lookAt(new THREE.Vector3(0, 1, 0));
-street8.position.y = .2;
-street8.position.x=x;
-street8.position.z=-475;
-scene.add(street8);
-x-=200;	
-}
-//street12
-var street12 = new Physijs.PlaneMesh(streetGeometry, streetMaterial1);
-street12.lookAt(new THREE.Vector3(0, 1, 0));
-street12.position.y = .2;
-street12.position.x=-1025;
-street12.position.z=-475;
-scene.add(street12);
-//street13
-x=25;
-for(var i=0; i<6; i++){
-	var street = new Physijs.PlaneMesh(streetGeometry, streetMaterial1);
+var street = new Physijs.PlaneMesh(street2Geometry, street2Material1);
 street.lookAt(new THREE.Vector3(0, 1, 0));
 street.position.y = .2;
-street.position.x=x;
+street.position.x=25;
 street.position.z=-475;
 scene.add(street);
-x+=200;	
+var x=25;
+for(var i=0; i<6; i++){
+	var streetS = new Physijs.PlaneMesh(street2Geometry, street2Material1);
+	streetS.lookAt(new THREE.Vector3(0, 1, 0));
+	streetS.position.y = .2;
+	streetS.position.x=x;
+	streetS.position.z=-475
+	scene.add(streetS);
+	x+=200;
 }
+x=-175;
+for(var i=0; i<4; i++){
+	var streetS = new Physijs.PlaneMesh(street2Geometry, street2Material1);
+	streetS.lookAt(new THREE.Vector3(0, 1, 0));
+	streetS.position.y = .2;
+	streetS.position.x=x;
+	streetS.position.z=-475;
+	scene.add(streetS);
+	x-=200;
+}
+var street2 = new Physijs.PlaneMesh(street2Geometry, street2Material1);
+street2.lookAt(new THREE.Vector3(0, 1, 0));
+street2.position.y = .2;
+street2.position.x=-1025;
+street2.position.z=-475;
+scene.add(street2);
+
+
+/////////////////////////////////////diagonal streets//////////////////////////////
+var streetGeometry = new THREE.PlaneGeometry(2050, 40);
+var streetMaterial1 = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('images/street.jpg')});
+
+var street3 = new Physijs.PlaneMesh(streetGeometry, streetMaterial1);
+street3.lookAt(new THREE.Vector3(0, 1, 0));
+street3.position.y = .2;
+street3.position.x=0;
+street3.position.z=25;
+scene.add(street3);
+
+
+var z= -175;
+for(var i=0; i< 5; i++){
+var streetD = new Physijs.PlaneMesh(streetGeometry, streetMaterial1);
+streetD.lookAt(new THREE.Vector3(0, 1, 0));
+streetD.position.y = .2;
+streetD.position.x=0;
+streetD.position.z=z;
+scene.add(streetD);
+z-=200;
+}
+
+
 /////////////////////////////////////////////////////////////////End of Streets//////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////// Road Lines/////////////////////////////////////////////////////
 var rLMaterial1 = new THREE.LineDashedMaterial( {
